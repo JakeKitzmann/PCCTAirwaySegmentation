@@ -1,0 +1,14 @@
+# pixi environments
+.pixi/*
+!.pixi/config.toml
+
+
+# images
+*.nii.gz
+*.nii
+*.nrrd
+*.dcm
+
+# build
+build/*
+
