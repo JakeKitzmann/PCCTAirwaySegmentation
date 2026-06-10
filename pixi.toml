@@ -7,6 +7,7 @@ version = "0.1.0"
 
 [tasks]
 build = { cmd = "cmake .. -DITK_DIR=~/dev/ITK-build -DSlicerExecutionModel_DIR=~/dev/SEM-build && cmake --build .", cwd = "build" }
+testrun = { cmd = "./RunRegistration --imgLow ../../../GroundTruthRegistration/TestData/Test256.nii.gz --imgHigh a --airwaySegLow a", cwd = "build/GroundTruthRegistration/src" }
 
 [dependencies]
 python = ">=3.14.5,<3.15"

@@ -1,5 +1,4 @@
 set(RunRegistration_SRC RunRegistration.cxx)
-
 find_package(SlicerExecutionModel REQUIRED GenerateCLP)
 include(${GenerateCLP_USE_FILE})
 include(${SlicerExecutionModel_USE_FILE})
