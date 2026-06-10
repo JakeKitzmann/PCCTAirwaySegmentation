@@ -14,6 +14,8 @@
 #include "itkCenteredTransformInitializer.h"
 #include "itkRegistrationParameterScalesFromPhysicalShift.h"
 #include "itkCommand.h"
+#include "itkLinearInterpolateImageFunction.h"
+#include "itkNearestNeighborInterpolateImageFunction.h"
 
 
 constexpr int Dimension = 3;
@@ -168,12 +170,47 @@ auto Registration(typename itk::Image<TPixel, Dimension>::Pointer imgLow, typena
 }
 
 template <typename TPixel>
+typename itk::Image<TPixel, Dimension>::Pointer
+ResampleImage(typename itk::Image<TPixel, Dimension>::Pointer inputImage,
+              typename itk::Image<TPixel, Dimension>::Pointer referenceImage,
+              const itk::AffineTransform<double, Dimension>* transform)
+{
+    using ImageType = itk::Image<TPixel, Dimension>;
+
+    using InterpolatorType = itk::LinearInterpolateImageFunction<ImageType, double>;
+    auto interpolator = InterpolatorType::New();
+
+    using ResampleFilterType = itk::ResampleImageFilter<ImageType, ImageType>;
+    auto resampleFilter = ResampleFilterType::New();
+
+    resampleFilter->SetInput(inputImage);
+    resampleFilter->SetTransform(transform);
+    resampleFilter->SetInterpolator(interpolator);
+
+    // Output grid = the fixed (high-res) image's grid
+    resampleFilter->SetReferenceImage(referenceImage);
+    resampleFilter->UseReferenceImageOn();
+
+    resampleFilter->SetDefaultPixelValue(0);
+    resampleFilter->Update();
+
+    typename ImageType::Pointer output = resampleFilter->GetOutput();
+    output->DisconnectPipeline();
+    return output;
+}
+
+
+template <typename TPixel>
 auto Process(const std::string& imgLow, std::string& imgHigh, std::string& airwaySegLow){
     auto imgLow_im = Preprocess<TPixel>(imgLow);
     auto imgHigh_im = Preprocess<TPixel>(imgHigh);
     auto airwaySegLow_im = Preprocess<TPixel>(airwaySegLow);
 
     auto transform = Registration<TPixel>(imgLow_im, imgHigh_im);
+
+    auto resampledLowResImage = ResampleImage<TPixel>(imgLow_im, imgHigh_im, transform);
+
+    itk::WriteImage(resampledLowResImage, "test.nii.gz");
 }
 
 int main(int argc, char* argv[])

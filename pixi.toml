@@ -7,7 +7,7 @@ version = "0.1.0"
 
 [tasks]
 build = { cmd = "cmake .. -DITK_DIR=~/dev/ITK-build -DSlicerExecutionModel_DIR=~/dev/SEM-build && cmake --build .", cwd = "build" }
-testrun = { cmd = "./RunRegistration --imgLow ../../../GroundTruthRegistration/TestData/Test256.nii.gz --imgHigh ../../../GroundTruthRegistration/TestData/Test512.nii.gz --airwaySegLow ../../../GroundTruthRegistration/TestData/Mask256.nii.gz", cwd = "build/GroundTruthRegistration/src" }
+test = { cmd = "./RunRegistration --imgLow ../../../TestData/Test256.nii.gz --imgHigh ../../../TestData/Test512.nii.gz --airwaySegLow ../../../TestData/Mask256.nii.gz", cwd = "build/GroundTruthRegistration/src" }
 
 [dependencies]
 python = ">=3.14.5,<3.15"
@@ -17,6 +17,7 @@ pandas = ">=3.0.3,<4"
 ipykernel = ">=7.2.0,<8"
 jupyterlab = ">=4.5.8,<5"
 simpleitk = ">=2.5.5,<3"
+gdown = ">=6.1.0,<7"
 
 [pypi-dependencies]
 itk = ">=5.4.6, <6"
