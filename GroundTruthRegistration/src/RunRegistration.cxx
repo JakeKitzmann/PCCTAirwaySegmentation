@@ -251,8 +251,12 @@ int main(int argc, char* argv[])
     else if(componentType == itk::ImageIOBase::IOComponentEnum::CHAR){
         Process<char>(imgLow, imgHigh, airwaySegLow);
     }
+    else if(componentType == itk::ImageIOBase::IOComponentEnum::INT){
+        Process<int>(imgLow, imgHigh, airwaySegLow);
+    }
     else{
         std::cout << "Unsupported voxel type: " << componentType << std::endl;
+        std::cout << "Note: this program does not support unsigned images due to negative HU values" << std::endl;
         return EXIT_FAILURE;
     }
 
