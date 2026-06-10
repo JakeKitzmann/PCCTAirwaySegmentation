@@ -95,4 +95,3 @@ Cluster jobs are submitted via **SGE** (`qsub`).
 | False Discovery Rate (FDR) | Over-segmentation measure |
 | Centerline / branch detection | Graph-based airway topology accuracy |
 
-Evaluation tooling lives in the sibling repo `../AirwaySegmentationEvaluation/`.
