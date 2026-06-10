@@ -24,7 +24,8 @@ auto Process(const std::string& imgLow, std::string& imgHigh, std::string& airwa
     auto imgLow_im = Preprocess<TPixel>(imgLow);
     auto imgHigh_im = Preprocess<TPixel>(imgHigh);
     auto airwaySegLow_im = Preprocess<TPixel>(airwaySegLow);
-    return 1;
+
+    
 }
 
 int main(int argc, char* argv[])
