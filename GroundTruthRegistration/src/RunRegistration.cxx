@@ -242,8 +242,17 @@ int main(int argc, char* argv[])
     {
         Process<short>(imgLow, imgHigh, airwaySegLow);
     }
+    else if(componentType == itk::ImageIOBase::IOComponentEnum::FLOAT){
+        Process<float>(imgLow, imgHigh, airwaySegLow);
+    }
+    else if(componentType == itk::ImageIOBase::IOComponentEnum::DOUBLE){
+        Process<double>(imgLow, imgHigh, airwaySegLow);
+    }
+    else if(componentType == itk::ImageIOBase::IOComponentEnum::CHAR){
+        Process<char>(imgLow, imgHigh, airwaySegLow);
+    }
     else{
-        std::cout << "Invalid image type" << std::endl;
+        std::cout << "Unsupported voxel type: " << componentType << std::endl;
         return EXIT_FAILURE;
     }
 
