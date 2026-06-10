@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <executable>
-  <category>Registration</category>
-  <title>UpsampleRegistration</title>
+  <category>APPIL</category>
+  <title>AirwayRegistration</title>
   <description>Upsamples airway segmentations from lower to higher resolution</description>
   <version>0.1.0</version>
   <contributor>Jacob J. Kitzmann</contributor>

@@ -129,6 +129,7 @@ auto Registration(typename itk::Image<TPixel, Dimension>::Pointer imgLow, typena
     registration->SetInitialTransform(initialTransform);
 
     // multi-resolution pyramid
+    // NOTE THIS IS DOWNSAMPLED SO THAT I CAN RUN QUICKLY
     RegistrationType::ShrinkFactorsArrayType shrinkFactorsPerLevel;
     shrinkFactorsPerLevel.SetSize(3);
     shrinkFactorsPerLevel[0] = 4;   // coarsest
@@ -169,15 +170,16 @@ auto Registration(typename itk::Image<TPixel, Dimension>::Pointer imgLow, typena
     return transform;
 }
 
-template <typename TPixel>
+template <typename TPixel,
+          template <typename, typename> class TInterpolator = itk::LinearInterpolateImageFunction>
 typename itk::Image<TPixel, Dimension>::Pointer
-ResampleImage(typename itk::Image<TPixel, Dimension>::Pointer inputImage,
-              typename itk::Image<TPixel, Dimension>::Pointer referenceImage,
-              const itk::AffineTransform<double, Dimension>* transform)
+Resample(typename itk::Image<TPixel, Dimension>::Pointer inputImage,
+         typename itk::Image<TPixel, Dimension>::Pointer referenceImage,
+         const itk::AffineTransform<double, Dimension>* transform)
 {
     using ImageType = itk::Image<TPixel, Dimension>;
 
-    using InterpolatorType = itk::LinearInterpolateImageFunction<ImageType, double>;
+    using InterpolatorType = TInterpolator<ImageType, double>;
     auto interpolator = InterpolatorType::New();
 
     using ResampleFilterType = itk::ResampleImageFilter<ImageType, ImageType>;
@@ -208,9 +210,14 @@ auto Process(const std::string& imgLow, std::string& imgHigh, std::string& airwa
 
     auto transform = Registration<TPixel>(imgLow_im, imgHigh_im);
 
-    auto resampledLowResImage = ResampleImage<TPixel>(imgLow_im, imgHigh_im, transform);
+    std::cout << "Resampling low res image..." << std::endl;
+    auto resampledLowResImage = Resample<TPixel>(imgLow_im, imgHigh_im, transform);
+    std::cout << "Resampling low res mask..." << std::endl;
+    auto resampledMask = Resample<TPixel, itk::NearestNeighborInterpolateImageFunction>(
+        airwaySegLow_im, imgHigh_im, transform);
 
     itk::WriteImage(resampledLowResImage, "test.nii.gz");
+    itk::WriteImage(resampledMask, "testMask.nii.gz");
 }
 
 int main(int argc, char* argv[])
@@ -240,7 +247,5 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-
-    std::cout << "ran" << std::endl;
     return EXIT_SUCCESS;
 }
