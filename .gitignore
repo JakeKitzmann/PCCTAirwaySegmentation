@@ -2,6 +2,7 @@
 .pixi/*
 !.pixi/config.toml
 
+*.zip
 
 # images
 *.nii.gz
