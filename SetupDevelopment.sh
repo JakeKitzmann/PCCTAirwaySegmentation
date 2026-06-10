@@ -1,9 +1,6 @@
 #!/bin/bash
 set -e
 
-REPO_ROOT="$(cd "$(dirname "$0")" && pwd)"
-cd "$REPO_ROOT"
-
 pixi install
 
 # ── 4. Download atlas data (MIATT_ATLAS/) if not already present ──────────────
