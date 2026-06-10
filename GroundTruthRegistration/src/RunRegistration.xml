@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<executable>
+  <category>Registration</category>
+  <title>UpsampleRegistration</title>
+  <description>Upsamples airway segmentations from lower to higher resolution</description>
+  <version>0.1.0</version>
+  <contributor>Jacob J. Kitzmann</contributor>
+
+  <parameters>
+    <label>Required Inputs</label>
+    <description>Low and high resolution images</description>
+
+    <image>
+      <name>imgLow</name>
+      <label>Low Resolution Image</label>
+      <channel>input</channel>
+      <longflag>imgLow</longflag>
+      <description>Lower resolution image</description>
+    </image>
+
+    <image>
+      <name>imgHigh</name>
+      <label>High Resolution Image</label>
+      <channel>input</channel>
+      <longflag>imgHigh</longflag>
+      <description>Higher resolution image</description>
+    </image>
+
+    <image>
+      <name>airwaySegLow</name>
+      <label>Low Resolution Airway Segmentation</label>
+      <channel>input</channel>
+      <longflag>airwaySegLow</longflag>
+      <description>Airway segmentation of low resolution image</description>
+    </image>
+  </parameters>   
+</executable>

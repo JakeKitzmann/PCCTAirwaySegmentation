@@ -6,6 +6,7 @@ platforms = ["osx-arm64"]
 version = "0.1.0"
 
 [tasks]
+build = { cmd = "cmake .. -DITK_DIR=~/dev/ITK-build -DSlicerExecutionModel_DIR=~/dev/SEM-build && cmake --build .", cwd = "build" }
 
 [dependencies]
 python = ">=3.14.5,<3.15"
