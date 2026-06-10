@@ -15,35 +15,63 @@ Each U-Net learns plane-specific features. The VFN learns to combine the three p
 ## Repo Layout
 
 ```
-cpp/        ITK-based preprocessing (CMake)
-python/     Deep learning training and inference
-scripts/    Cluster job scripts (SGE)
+GroundTruthRegistration/   ITK-based registration of low/high-res CT ground truth masks (C++/CMake)
+GetAeroPathData/           Notebook to download the AeroPath public dataset
+AnalyzeAirwaySeg/          3D Slicer extension for airway segmentation analysis
+TestData/                  Small NIfTI test volumes (256³ and 512³)
+QualifyingExam/            Qualifying exam writeup
+build/                     CMake out-of-source build directory (git-ignored)
+pixi.toml                  Pixi environment and task definitions
+SetupDevelopment.sh        One-shot setup script (pixi install + test data download)
+CMakeLists.txt             Root CMake (adds GroundTruthRegistration)
 ```
 
 ## Getting Started
 
 ### Prerequisites
 
+- [pixi](https://pixi.sh) for environment and task management
 - [ITK](https://itk.org/) built at `~/dev/ITK-build`
 - [SlicerExecutionModel](https://github.com/Slicer/SlicerExecutionModel) built at `~/dev/SEM-build`
-- [pixi](https://pixi.sh) for Python environment management
-- CMake ≥ 3.16
+- CMake ≥ 3.22
 
-### Build C++ Preprocessing
+### Setup
 
 ```bash
-cd cpp
-mkdir build && cd build
+./SetupDevelopment.sh
+```
+
+This runs `pixi install` and downloads test data from Google Drive if not already present.
+
+### Build C++ (GroundTruthRegistration)
+
+```bash
+pixi run build
+```
+
+This runs CMake configure + build from the `build/` directory using the ITK and SlicerExecutionModel paths above. Equivalent to:
+
+```bash
+cd build
 cmake .. -DITK_DIR=~/dev/ITK-build -DSlicerExecutionModel_DIR=~/dev/SEM-build
 cmake --build .
 ```
 
-### Python Environment
+### Test Registration
 
 ```bash
-pixi install
-pixi run <task>
+pixi run test
 ```
+
+Runs `RunRegistration` on the 256³ and 512³ test volumes in `TestData/`.
+
+### Python / Jupyter
+
+```bash
+pixi run jupyterlab
+```
+
+Key Python dependencies (managed by pixi): `numpy`, `matplotlib`, `pandas`, `simpleitk`, `itk`, `gdown`.
 
 ## Data
 
@@ -53,10 +81,10 @@ Cluster jobs are submitted via **SGE** (`qsub`).
 
 ## Pipeline Overview
 
-1. **Preprocessing** (C++ / ITK) — resampling, normalization, patch extraction from raw PCCT volumes
-2. **Training** (Python / DL) — train axial, coronal, and sagittal U-Nets independently, then train the VFN
-3. **Inference** — run all three U-Nets and the VFN on new volumes
-4. **Evaluation** — metrics computed via [`AirwaySegmentationEvaluation`](../AirwaySegmentationEvaluation/)
+1. **Ground Truth Registration** (C++ / ITK) — registers low-res airway masks to high-res PCCT volumes (`GroundTruthRegistration/`)
+2. **Training** (Python / DL) — train axial, coronal, and sagittal U-Nets independently, then train the VFN *(in development)*
+3. **Inference** — run all three U-Nets and the VFN on new volumes *(in development)*
+4. **Evaluation** — metrics computed via [`AirwaySegmentationEvaluation`](../AirwaySegmentationEvaluation/) or the `AnalyzeAirwaySeg` Slicer extension
 
 ## Evaluation Metrics
 
