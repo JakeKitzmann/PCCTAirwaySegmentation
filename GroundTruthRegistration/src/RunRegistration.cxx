@@ -129,7 +129,6 @@ auto Registration(typename itk::Image<TPixel, Dimension>::Pointer imgLow, typena
     registration->SetInitialTransform(initialTransform);
 
     // multi-resolution pyramid
-    // NOTE THIS IS DOWNSAMPLED SO THAT I CAN RUN QUICKLY
     RegistrationType::ShrinkFactorsArrayType shrinkFactorsPerLevel;
     shrinkFactorsPerLevel.SetSize(3);
     shrinkFactorsPerLevel[0] = 4;   // coarsest

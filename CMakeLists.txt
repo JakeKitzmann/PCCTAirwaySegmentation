@@ -3,4 +3,4 @@ set(CMAKE_CXX_STANDARD 17)
 
 project(PCCTAirwaySegmentation)
 add_subdirectory(GroundTruthRegistration)
-
+# add_subdirectory(Tests)

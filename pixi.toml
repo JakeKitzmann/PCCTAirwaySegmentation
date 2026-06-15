@@ -2,7 +2,7 @@
 authors = ["JakeKitzmann <97077033+JakeKitzmann@users.noreply.github.com>"]
 channels = ["conda-forge"]
 name = "PCCTAirwaySegmentation"
-platforms = ["osx-arm64"]
+platforms = ["osx-arm64", "linux-aarch64"]
 version = "0.1.0"
 
 [tasks]
@@ -10,8 +10,6 @@ build = { cmd = "cmake .. -DITK_DIR=~/dev/ITK-build -DSlicerExecutionModel_DIR=~
 test_256_512 = { cmd = "./RunRegistration --imgLow ../../../TestData/Test256.nii.gz --imgHigh ../../../TestData/Test512.nii.gz --airwaySegLow ../../../TestData/Mask256.nii.gz", cwd = "build/GroundTruthRegistration/src" }
 
 test_512_1024 = { cmd = "./RunRegistration --imgLow ../../../TestData/Test512.nii.gz --imgHigh ../../../TestData/Test1024.nii.gz --airwaySegLow ../../../TestData/Mask512.nii.gz", cwd = "build/GroundTruthRegistration/src" }
-
-
 
 [dependencies]
 python = ">=3.14.5,<3.15"
@@ -22,6 +20,3 @@ ipykernel = ">=7.2.0,<8"
 jupyterlab = ">=4.5.8,<5"
 simpleitk = ">=2.5.5,<3"
 gdown = ">=6.1.0,<7"
-
-[pypi-dependencies]
-itk = ">=5.4.6, <6"
