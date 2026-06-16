@@ -1,5 +1,5 @@
-#include "GroundTruthRegistration.h"
-#include <RunRegistrationCLP.h>
+#include "AirwayRegistration.h"
+#include <AirwayRegistrationCLP.h>
 
 int main(int argc, char* argv[])
 {  
@@ -14,7 +14,7 @@ int main(int argc, char* argv[])
         return EXIT_FAILURE;
     }
 
-    imageIO->SetFileName(imgLow);
+    imageIO->SetFileName(movingImg);
     imageIO->ReadImageInformation();
 
     auto componentType = imageIO->GetComponentType();

@@ -169,8 +169,6 @@ auto Registration(typename itk::Image<TPixel, Dimension>::Pointer movingImg, typ
 }
 
 
-template <typename TPixel,
-          template <typename, typename> class TInterpolator = itk::NearestNeighborsInterplateImageFunction>
 typename itk::Image<TPixel, Dimension>::Pointer
 Resample(typename itk::Image<TPixel, Dimension>::Pointer inputImage,
          typename itk::Image<TPixel, Dimension>::Pointer referenceImage,
@@ -178,7 +176,7 @@ Resample(typename itk::Image<TPixel, Dimension>::Pointer inputImage,
 {
     using ImageType = itk::Image<TPixel, Dimension>;
 
-    using InterpolatorType = TInterpolator<ImageType, double>;
+    using InterpolatorType = itk::NearestNeighborInterpolateImageFunction<ImageType, double>;
     auto interpolator = InterpolatorType::New();
 
     using ResampleFilterType = itk::ResampleImageFilter<ImageType, ImageType>;
@@ -203,14 +201,13 @@ Resample(typename itk::Image<TPixel, Dimension>::Pointer inputImage,
 
 template <typename TPixel>
 auto Process(const std::string& movingImg, std::string& fixedImg){
-    auto imgLow_im = Preprocess<TPixel>(movingImg);
-    auto imgHigh_im = Preprocess<TPixel>(fixedImg);
+    auto movingImage = Preprocess<TPixel>(movingImg);
+    auto fixedImage = Preprocess<TPixel>(fixedImg);
 
-    auto transform = Registration<TPixel>(movingImg, fixedImg);
+    auto transform = Registration<TPixel>(movingImage, fixedImage);
 
     std::cout << "Resampling moving image..." << std::endl;
-    auto resampledLowResImage = Resample<TPixel>(movingImg, fixedImg, transform);
+    auto resampled = Resample<TPixel>(movingImage, fixedImage, transform);
 
-    itk::WriteImage(resampledLowResImage, movingImg + "_registered.nii.gz");
-    itk::WriteImage(resampledMask, "testMask.nii.gz");
+    itk::WriteImage(resampled, movingImg + "_registered.nii.gz");
 }
