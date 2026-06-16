@@ -2,7 +2,7 @@
 authors = ["JakeKitzmann <97077033+JakeKitzmann@users.noreply.github.com>"]
 channels = ["conda-forge"]
 name = "PCCTAirwaySegmentation"
-platforms = ["osx-arm64", "linux-aarch64"]
+platforms = ["osx-arm64", "linux-aarch64", "linux-64"]
 version = "0.1.0"
 
 [tasks]
