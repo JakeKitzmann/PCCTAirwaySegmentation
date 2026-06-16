@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<executable>
+  <category>APPIL</category>
+  <title>AirwaySegmentationRegistration</title>
+  <description></description>
+  <version>0.1.0</version>
+  <contributor>Jacob J. Kitzmann</contributor>
+
+  <parameters>
+    <label>Required Inputs</label>
+    <description>Airway segmentation images</description>
+
+    <image>
+      <name>movingImg</name>
+      <label>Airway Segmentation One</label>
+      <channel>input</channel>
+      <longflag>movingImg</longflag>
+      <description>Airway Segmentation One</description>
+    </image>
+
+    <image>
+      <name>fixedImg</name>
+      <label>Airway Segmentation Two</label>
+      <channel>input</channel>
+      <longflag>fixedImg</longflag>
+      <description>Airway Segmentation Two</description>
+    </image>
+  </parameters>   
+</executable>
