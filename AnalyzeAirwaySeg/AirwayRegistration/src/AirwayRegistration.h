@@ -17,6 +17,7 @@
 #include "itkCommand.h"
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
+#include "itkEuler3DTransform.h"
 
 constexpr int Dimension = 3;
 
@@ -36,6 +37,7 @@ class CommandIterationUpdate : public itk::Command
 {
     public:
         using Self = CommandIterationUpdate;
+
         using Superclass = itk::Command;
         using Pointer = itk::SmartPointer<Self>;
         itkNewMacro(Self);
@@ -86,7 +88,7 @@ auto Registration(typename itk::Image<TPixel, Dimension>::Pointer movingImg, typ
     fixedCaster->Update();
     const auto fixedImage = fixedCaster->GetOutput();
 
-    using TransformType = itk::Euler3DTransform<double, Dimension>;
+    using TransformType = itk::Euler3DTransform<double>;
     auto initialTransform = TransformType::New();
 
     using OptimizerType = itk::RegularStepGradientDescentOptimizerv4<double>;
@@ -172,7 +174,7 @@ template <typename TPixel>
 typename itk::Image<TPixel, Dimension>::Pointer
 Resample(typename itk::Image<TPixel, Dimension>::Pointer inputImage,
          typename itk::Image<TPixel, Dimension>::Pointer referenceImage,
-         const itk::Euler3DTransform<double, Dimension>* transform)
+         const itk::Euler3DTransform<double>* transform)
 {
     using ImageType = itk::Image<TPixel, Dimension>;
 

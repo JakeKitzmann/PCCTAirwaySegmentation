@@ -8,4 +8,4 @@ find_package(ITK 6.0.0 REQUIRED)
 include(${ITK_USE_FILE})
 
 add_executable(AirwayRegistration ${AirwayRegistration_SRC})
-target_link_libraries(RunRegistration ${ITK_LIBRARIES})
+target_link_libraries(AirwayRegistration ${ITK_LIBRARIES})
