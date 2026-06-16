@@ -168,11 +168,11 @@ auto Registration(typename itk::Image<TPixel, Dimension>::Pointer movingImg, typ
     return transform;
 }
 
-
+template <typename TPixel>
 typename itk::Image<TPixel, Dimension>::Pointer
 Resample(typename itk::Image<TPixel, Dimension>::Pointer inputImage,
          typename itk::Image<TPixel, Dimension>::Pointer referenceImage,
-         const itk::AffineTransform<double, Dimension>* transform)
+         const itk::Euler3DTransform<double, Dimension>* transform)
 {
     using ImageType = itk::Image<TPixel, Dimension>;
 
