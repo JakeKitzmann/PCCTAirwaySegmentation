@@ -198,8 +198,10 @@ Resample(typename itk::Image<TPixel, Dimension>::Pointer inputImage,
     resampleFilter->SetTransform(transform);
     resampleFilter->SetInterpolator(interpolator);
 
-    resampleFilter->SetReferenceImage(referenceImage);
-    resampleFilter->UseReferenceImageOn();
+    resampleFilter->SetSize(referenceImage->GetLargestPossibleRegion().GetSize());
+    resampleFilter->SetOutputSpacing(referenceImage->GetSpacing());
+    resampleFilter->SetOutputOrigin(referenceImage->GetOrigin());
+    resampleFilter->SetOutputDirection(referenceImage->GetDirection());
 
     resampleFilter->SetDefaultPixelValue(0);
     resampleFilter->Update();
