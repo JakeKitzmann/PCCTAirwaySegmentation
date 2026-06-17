@@ -25,5 +25,14 @@
       <longflag>fixedImg</longflag>
       <description>Airway Segmentation Two</description>
     </image>
+
+    <image>
+      <name>registeredImg</name>
+      <label>Registered Image</label>
+      <longflag>registeredImg</longflag>
+      <channel>output</channel>
+      <description>Output volume for Airway 2 registered to Airway 1</description>
+      <default>outputRegistered.nii.gz</default>
+    </image>
   </parameters>   
 </executable>

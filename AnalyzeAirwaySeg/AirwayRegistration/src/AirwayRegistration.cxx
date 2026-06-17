@@ -21,23 +21,25 @@ int main(int argc, char* argv[])
 
     if (componentType == itk::ImageIOBase::IOComponentEnum::SHORT)
     {
-        Process<short>(movingImg, fixedImg);
+        Process<short>(movingImg, fixedImg, registeredImg);
     }
     else if(componentType == itk::ImageIOBase::IOComponentEnum::FLOAT){
-        Process<float>(movingImg, fixedImg);
+        Process<float>(movingImg, fixedImg, registeredImg);
     }
     else if(componentType == itk::ImageIOBase::IOComponentEnum::DOUBLE){
-        Process<double>(movingImg, fixedImg);
+        Process<double>(movingImg, fixedImg, registeredImg);
     }
     else if(componentType == itk::ImageIOBase::IOComponentEnum::CHAR){
-        Process<char>(movingImg, fixedImg);
+        Process<char>(movingImg, fixedImg, registeredImg);
     }
     else if(componentType == itk::ImageIOBase::IOComponentEnum::INT){
-        Process<int>(movingImg, fixedImg);
+        Process<int>(movingImg, fixedImg, registeredImg);
+    }
+    else if(componentType == itk::ImageIOBase::IOComponentEnum::UCHAR){
+        Process<char>(movingImg, fixedImg, registeredImg);
     }
     else{
         std::cout << "Unsupported voxel type: " << componentType << std::endl;
-        std::cout << "Note: this program does not support unsigned images due to negative HU values" << std::endl;
         return EXIT_FAILURE;
     }
 

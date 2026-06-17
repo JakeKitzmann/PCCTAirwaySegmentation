@@ -32,6 +32,16 @@ typename itk::Image<TPixel, Dimension>::Pointer Preprocess(const std::string& im
     return output;
 }
 
+template <typename TPixel>
+void WriteImageT(typename itk::Image<TPixel, Dimension>::Pointer img, const std::string& filename)
+{
+    using WriterType = itk::ImageFileWriter<itk::Image<TPixel, Dimension>>;
+    auto writer = WriterType::New();
+    writer->SetFileName(filename);
+    writer->SetInput(img);
+    writer->Update();
+}
+
 // show iterations of registration
 class CommandIterationUpdate : public itk::Command
 {
@@ -188,7 +198,6 @@ Resample(typename itk::Image<TPixel, Dimension>::Pointer inputImage,
     resampleFilter->SetTransform(transform);
     resampleFilter->SetInterpolator(interpolator);
 
-    // Output grid = the fixed (high-res) image's grid
     resampleFilter->SetReferenceImage(referenceImage);
     resampleFilter->UseReferenceImageOn();
 
@@ -202,7 +211,7 @@ Resample(typename itk::Image<TPixel, Dimension>::Pointer inputImage,
 
 
 template <typename TPixel>
-auto Process(const std::string& movingImg, std::string& fixedImg){
+int Process(const std::string& movingImg, const std::string& fixedImg, const std::string& registeredImg){
     auto movingImage = Preprocess<TPixel>(movingImg);
     auto fixedImage = Preprocess<TPixel>(fixedImg);
 
@@ -211,5 +220,7 @@ auto Process(const std::string& movingImg, std::string& fixedImg){
     std::cout << "Resampling moving image..." << std::endl;
     auto resampled = Resample<TPixel>(movingImage, fixedImage, transform);
 
-    itk::WriteImage(resampled, movingImg + "_registered.nii.gz");
-}
+    WriteImageT<TPixel>(resampled, registeredImg);
+
+    return 0;
+    }
