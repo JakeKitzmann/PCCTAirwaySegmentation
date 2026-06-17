@@ -81,6 +81,7 @@ class CommandIterationUpdate : public itk::Command
 template <typename TPixel>
 auto Registration(typename itk::Image<TPixel, Dimension>::Pointer movingImg, typename itk::Image<TPixel, Dimension>::Pointer fixedImg){
     
+    std::cout << "hi" << std::endl;
     using PrevImageType = itk::Image<TPixel, Dimension>;
     using RegistrationImageType = itk::Image<double, Dimension>;
 
