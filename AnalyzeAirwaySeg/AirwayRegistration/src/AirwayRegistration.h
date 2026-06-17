@@ -18,6 +18,7 @@
 #include "itkLinearInterpolateImageFunction.h"
 #include "itkNearestNeighborInterpolateImageFunction.h"
 #include "itkEuler3DTransform.h"
+#include "itkSignedMaurerDistanceMapImageFilter.h"
 
 constexpr int Dimension = 3;
 
@@ -40,6 +41,29 @@ void WriteImageT(typename itk::Image<TPixel, Dimension>::Pointer img, const std:
     writer->SetFileName(filename);
     writer->SetInput(img);
     writer->Update();
+}
+
+template <typename TPixel>
+itk::Image<double, Dimension>::Pointer
+ComputeSignedDistanceMap(typename itk::Image<TPixel, Dimension>::Pointer binaryImg)
+{
+    using InputImageType = itk::Image<TPixel, Dimension>;
+    using OutputImageType = itk::Image<double, Dimension>;
+
+    using DistanceMapFilterType =
+        itk::SignedMaurerDistanceMapImageFilter<InputImageType, OutputImageType>;
+
+    auto distanceMapFilter = DistanceMapFilterType::New();
+    distanceMapFilter->SetInput(binaryImg);
+
+    distanceMapFilter->SetUseImageSpacing(true);
+    distanceMapFilter->SetInsideIsPositive(false);
+    distanceMapFilter->SetSquaredDistance(false);
+    distanceMapFilter->Update();
+
+    typename OutputImageType::Pointer output = distanceMapFilter->GetOutput();
+    output->DisconnectPipeline();
+    return output;
 }
 
 // show iterations of registration
@@ -80,22 +104,12 @@ class CommandIterationUpdate : public itk::Command
 
 template <typename TPixel>
 auto Registration(typename itk::Image<TPixel, Dimension>::Pointer movingImg, typename itk::Image<TPixel, Dimension>::Pointer fixedImg){
-    
-    std::cout << "hi" << std::endl;
-    using PrevImageType = itk::Image<TPixel, Dimension>;
+
     using RegistrationImageType = itk::Image<double, Dimension>;
 
-    using CastFilterType = itk::CastImageFilter<PrevImageType, RegistrationImageType>;
-
-    auto movingCaster = CastFilterType::New();
-    movingCaster->SetInput(movingImg);
-    movingCaster->Update();
-    const auto movingImage = movingCaster->GetOutput();
-
-    auto fixedCaster = CastFilterType::New();
-    fixedCaster->SetInput(fixedImg);
-    fixedCaster->Update();
-    const auto fixedImage = fixedCaster->GetOutput();
+    // casting to reg type is handled in signed dist map fn
+    const auto movingImage = ComputeSignedDistanceMap<TPixel>(movingImg);
+    const auto fixedImage = ComputeSignedDistanceMap<TPixel>(fixedImg);
 
     using TransformType = itk::Euler3DTransform<double>;
     auto initialTransform = TransformType::New();
@@ -134,7 +148,7 @@ auto Registration(typename itk::Image<TPixel, Dimension>::Pointer movingImg, typ
     initializer->SetTransform(initialTransform);
     initializer->SetFixedImage(fixedImage);
     initializer->SetMovingImage(movingImage);
-    initializer->GeometryOn();          // align geometric centers
+    initializer->MomentsOn();          // align geometric centers
     initializer->InitializeTransform();
 
     registration->SetInitialTransform(initialTransform);
