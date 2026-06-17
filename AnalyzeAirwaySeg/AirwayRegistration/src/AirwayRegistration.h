@@ -148,7 +148,7 @@ auto Registration(typename itk::Image<TPixel, Dimension>::Pointer movingImg, typ
     initializer->SetTransform(initialTransform);
     initializer->SetFixedImage(fixedImage);
     initializer->SetMovingImage(movingImage);
-    initializer->MomentsOn();          // align geometric centers
+    initializer->MomentsOn();          // align centers of mass
     initializer->InitializeTransform();
 
     registration->SetInitialTransform(initialTransform);

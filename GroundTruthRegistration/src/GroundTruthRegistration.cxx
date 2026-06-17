@@ -1,5 +1,5 @@
 #include "GroundTruthRegistration.h"
-#include <RunRegistrationCLP.h>
+#include <GroundTruthRegistrationCLP.h>
 
 int main(int argc, char* argv[])
 {  
@@ -21,19 +21,19 @@ int main(int argc, char* argv[])
 
     if (componentType == itk::ImageIOBase::IOComponentEnum::SHORT)
     {
-        Process<short>(imgLow, imgHigh, airwaySegLow);
+        Process<short>(imgLow, imgHigh, airwaySegLow, registeredImg, airwaySegHigh);
     }
     else if(componentType == itk::ImageIOBase::IOComponentEnum::FLOAT){
-        Process<float>(imgLow, imgHigh, airwaySegLow);
+        Process<float>(imgLow, imgHigh, airwaySegLow, registeredImg, airwaySegHigh);
     }
     else if(componentType == itk::ImageIOBase::IOComponentEnum::DOUBLE){
-        Process<double>(imgLow, imgHigh, airwaySegLow);
+        Process<double>(imgLow, imgHigh, airwaySegLow, registeredImg, airwaySegHigh);
     }
     else if(componentType == itk::ImageIOBase::IOComponentEnum::CHAR){
-        Process<char>(imgLow, imgHigh, airwaySegLow);
+        Process<char>(imgLow, imgHigh, airwaySegLow, registeredImg, airwaySegHigh);
     }
     else if(componentType == itk::ImageIOBase::IOComponentEnum::INT){
-        Process<int>(imgLow, imgHigh, airwaySegLow);
+        Process<int>(imgLow, imgHigh, airwaySegLow, registeredImg, airwaySegHigh);
     }
     else{
         std::cout << "Unsupported voxel type: " << componentType << std::endl;

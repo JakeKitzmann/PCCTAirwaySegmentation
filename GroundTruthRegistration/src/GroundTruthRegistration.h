@@ -101,7 +101,6 @@ auto Registration(typename itk::Image<TPixel, Dimension>::Pointer imgLow, typena
     // scale w/ physical shift
     using MetricType = itk::MeanSquaresImageToImageMetricv4<RegistrationImageType, RegistrationImageType>;
     auto metric = MetricType::New();
-
     using ScalesEstimatorType = itk::RegistrationParameterScalesFromPhysicalShift<MetricType>;
     auto scalesEstimator = ScalesEstimatorType::New();
     scalesEstimator->SetMetric(metric);
@@ -202,7 +201,8 @@ Resample(typename itk::Image<TPixel, Dimension>::Pointer inputImage,
 
 
 template <typename TPixel>
-auto Process(const std::string& imgLow, std::string& imgHigh, std::string& airwaySegLow){
+auto Process(const std::string& imgLow, const std::string& imgHigh, const std::string& airwaySegLow,
+                const std::string& registeredImg, const std::string& airwaySegHigh){
     auto imgLow_im = Preprocess<TPixel>(imgLow);
     auto imgHigh_im = Preprocess<TPixel>(imgHigh);
     auto airwaySegLow_im = Preprocess<TPixel>(airwaySegLow);
@@ -215,6 +215,6 @@ auto Process(const std::string& imgLow, std::string& imgHigh, std::string& airwa
     auto resampledMask = Resample<TPixel, itk::NearestNeighborInterpolateImageFunction>(
         airwaySegLow_im, imgHigh_im, transform);
 
-    itk::WriteImage(resampledLowResImage, "test.nii.gz");
-    itk::WriteImage(resampledMask, "testMask.nii.gz");
+    itk::WriteImage(resampledLowResImage, registeredImg);
+    itk::WriteImage(resampledMask, airwaySegHigh);
 }

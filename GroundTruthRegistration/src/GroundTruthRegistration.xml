@@ -33,5 +33,23 @@
       <longflag>airwaySegLow</longflag>
       <description>Airway segmentation of low resolution image</description>
     </image>
+
+    <image>
+      <name>airwaySegHigh</name>
+      <label>Output Airway Segmentation</label>
+      <channel>output</channel>
+      <longflag>airwaySegHigh</longflag>
+      <description>Registered airway segmentation baseline</description>
+      <default>outputSegmentation.nii.gz</default>
+    </image>
+
+    <image>
+      <name>registeredImg</name>
+      <label>Output Registered Image</label>
+      <longflag>registeredImg</longflag>
+      <channel>output</channel>
+      <description>Registered low resolution image to high resolution</description>
+      <default>outputImage.nii.gz</default>
+    </image>
   </parameters>   
 </executable>
