@@ -9,8 +9,17 @@ import os
 import sys
 from scipy import ndimage
 import skimage.measure as measure
-import nibabel
 from skimage.morphology import skeletonize
+
+
+def _ensure_dependencies():
+    for pkg, pip_name in [
+        ("nibabel", "nibabel")
+    ]:
+        try:
+            __import__(pkg)
+        except ImportError:
+            slicer.util.pip_install(pip_name)
 
 
 def find_bb_3D(label):
@@ -306,4 +315,5 @@ def tree_parse():
         np.save(save_name_cm, children_map)
 
 if __name__=='__main__':
+    _ensure_dependencies()
     tree_parse()

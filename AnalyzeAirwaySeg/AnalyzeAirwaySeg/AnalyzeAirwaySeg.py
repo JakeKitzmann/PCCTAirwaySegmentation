@@ -11,6 +11,7 @@ def _ensure_dependencies():
         ("skimage", "scikit-image"),
         ("scipy", "scipy"),
         ("itk", "itk"),
+        ("nibabel", "nibabel")
     ]:
         try:
             __import__(pkg)
