@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<executable>
+  <category>APPIL</category>
+  <title>AnalyzeAirwaySegmentation</title>
+  <description></description>
+  <version>0.1.0</version>
+  <contributor>Jacob J. Kitzmann</contributor>
+
+  <parameters>
+    <label>Required Inputs</label>
+    <description>Airway segmentation images</description>
+
+    <image>
+      <name>segmentationGT</name>
+      <label>Ground Truth Segmentation</label>
+      <channel>input</channel>
+      <longflag>segmentationGT</longflag>
+      <description>Ground truth segmentation to compare to</description>
+    </image>
+
+    <image>
+      <name>segmentationPred</name>
+      <label>Predicted Airway Segmentation</label>
+      <channel>input</channel>
+      <longflag>segmentationPred</longflag>
+      <description>Predicted segmentation to measure accuracy</description>
+    </image>
+
+    <image>
+        <name>skeletonGT</name>
+        <label>Ground Truth Skeleton</label>
+        <channel>output</channel>
+        <description>Skeletonized ground truth segmentation</description>
+        <default>skeletonizedGT.nii.gz</default>
+    </image>
+  
+    <image>
+        <name>skeletonPred</name>
+        <label>Prediction Skeleton</label>
+        <channel>output</channel>
+        <description>Skeletonized predicted segmentation</description>
+        <default>skeletonizedPred.nii.gz</default>
+    </image>
+
+    <image>
+        <name>labeledGT</name>
+        <label>Ground Truth Labeled Airways</label>
+        <channel>output</channel>
+        <description>Labeled ground truth segmentation</description>
+        <default>labeledGT.nii.gz</default>
+    </image>
+
+    <image>
+        <name>labeledPred</name>
+        <label>Prediction Labeled Airways</label>
+        <channel>output</channel>
+        <description>Labeled predicted segmentation</description>
+        <default>labeledPred.nii.gz</default>
+    </image>
+
+  </parameters>   
+</executable>
