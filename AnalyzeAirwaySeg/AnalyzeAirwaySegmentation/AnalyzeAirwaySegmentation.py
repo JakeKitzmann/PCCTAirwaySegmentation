@@ -1,36 +1,41 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python-real
 import sys
 import os
 import argparse
 import numpy as np
+import itk
+from skimage.morphology import skeletonize
+
+
+def load_array(path):
+    """Read any ITK-supported format; return (numpy_xyz, itk_image)."""
+    img = itk.imread(path)
+    # itk.GetArrayFromImage returns (z, y, x); ATM22 expects (x, y, z)
+    return itk.GetArrayFromImage(img).T, img
+
+
+def save_like(array_xyz, reference_img, path):
+    """Write array (x, y, z) to path, preserving spatial metadata from reference."""
+    out = itk.GetImageFromArray(np.ascontiguousarray(array_xyz.T))
+    out.SetOrigin(reference_img.GetOrigin())
+    out.SetSpacing(reference_img.GetSpacing())
+    out.SetDirection(reference_img.GetDirection())
+    itk.imwrite(out, path)
 
 
 def main():
     parser = argparse.ArgumentParser(description="ATM'22 airway segmentation evaluation")
-    parser.add_argument('--segmentationGT', required=True)
+    parser.add_argument('--segmentationGT',  required=True)
     parser.add_argument('--segmentationPred', required=True)
-    parser.add_argument('--skeletonGT', required=True)
-    parser.add_argument('--skeletonPred', required=True)
-    parser.add_argument('--labeledGT', required=True)
-    parser.add_argument('--labeledPred', required=True)
+    parser.add_argument('--skeletonGT',      required=True)
+    parser.add_argument('--skeletonPred',    required=True)
+    parser.add_argument('--labeledGT',       required=True)
+    parser.add_argument('--labeledPred',     required=True)
     args = parser.parse_args()
 
     script_dir = os.path.dirname(os.path.abspath(__file__))
     sys.path.insert(0, os.path.join(script_dir, 'atm22'))
 
-    try:
-        import nibabel as nib
-    except ImportError:
-        import subprocess
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'nibabel'])
-        import nibabel as nib
-
-    try:
-        from skimage.morphology import skeletonize
-    except ImportError:
-        import subprocess
-        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'scikit-image'])
-        from skimage.morphology import skeletonize
     from tree_parse import (
         large_connected_domain, skeleton_parsing, tree_parsing_func,
         loc_trachea, adjacent_map, parent_children_map,
@@ -41,11 +46,11 @@ def main():
         tree_length_calculation, false_positive_rate_calculation,
     )
 
-    gt_nib = nib.load(args.segmentationGT)
-    pred_nib = nib.load(args.segmentationPred)
+    gt_raw,   gt_img   = load_array(args.segmentationGT)
+    pred_raw, pred_img = load_array(args.segmentationPred)
 
-    gt_orig = (gt_nib.get_fdata() > 0).astype(np.uint8)
-    pred_orig = (pred_nib.get_fdata() > 0).astype(np.uint8)
+    gt_orig   = (gt_raw   > 0).astype(np.uint8)
+    pred_orig = (pred_raw > 0).astype(np.uint8)
 
     # GT tree parsing
     gt = large_connected_domain(gt_orig)
@@ -75,17 +80,15 @@ def main():
         pred_ad = adjacent_map(pred_tree_parsing, pred_num)
         pred_parent, pred_children, _ = parent_children_map(pred_ad, pred_trachea, pred_num)
 
-    # Metrics (against original pred, matching Python module behavior)
-    dsc = dice_coefficient_score_calculation(pred_orig, gt)
-    td = tree_length_calculation(pred_orig, skeleton)
+    dsc       = dice_coefficient_score_calculation(pred_orig, gt)
+    td        = tree_length_calculation(pred_orig, skeleton)
     total_b, det_b, bd = branch_detected_calculation(pred_orig, tree_parsing, skeleton)
-    fpr = false_positive_rate_calculation(pred_orig, gt)
+    fpr       = false_positive_rate_calculation(pred_orig, gt)
 
-    # Save image outputs
-    nib.save(nib.Nifti1Image(skeleton, gt_nib.affine), args.skeletonGT)
-    nib.save(nib.Nifti1Image(pred_skeleton, pred_nib.affine), args.skeletonPred)
-    nib.save(nib.Nifti1Image(tree_parsing.astype(np.uint16), gt_nib.affine), args.labeledGT)
-    nib.save(nib.Nifti1Image(pred_tree_parsing.astype(np.uint16), pred_nib.affine), args.labeledPred)
+    save_like(skeleton,                          gt_img,   args.skeletonGT)
+    save_like(pred_skeleton,                     pred_img, args.skeletonPred)
+    save_like(tree_parsing.astype(np.uint16),    gt_img,   args.labeledGT)
+    save_like(pred_tree_parsing.astype(np.uint16), pred_img, args.labeledPred)
 
     col = 28
     print(f"{'Dice Score (DSC)':<{col}}{dsc:.2f}%")

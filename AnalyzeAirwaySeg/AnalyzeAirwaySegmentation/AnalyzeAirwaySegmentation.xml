@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<executable>
+  <category>APPIL</category>
+  <title>AnalyzeAirwaySegmentation</title>
+  <description></description>
+  <version>0.1.0</version>
+  <contributor>Jacob J. Kitzmann</contributor>
+
+  <parameters>
+    <label>Inputs</label>
+    <description>Airway segmentation images to evaluate</description>
+
+    <image>
+      <name>segmentationGT</name>
+      <label>Ground Truth Segmentation</label>
+      <channel>input</channel>
+      <longflag>segmentationGT</longflag>
+      <description>Ground truth segmentation to compare to</description>
+    </image>
+
+    <image>
+      <name>segmentationPred</name>
+      <label>Predicted Airway Segmentation</label>
+      <channel>input</channel>
+      <longflag>segmentationPred</longflag>
+      <description>Predicted segmentation to measure accuracy</description>
+    </image>
+
+  </parameters>
+
+  <parameters>
+    <label>Outputs</label>
+    <description>Derived images produced during evaluation</description>
+
+    <image>
+      <name>skeletonGT</name>
+      <label>Ground Truth Skeleton</label>
+      <longflag>skeletonGT</longflag>
+      <channel>output</channel>
+      <description>Skeletonized ground truth segmentation</description>
+      <default>skeletonizedGT.nii.gz</default>
+    </image>
+
+    <image>
+      <name>skeletonPred</name>
+      <label>Prediction Skeleton</label>
+      <longflag>skeletonPred</longflag>
+      <channel>output</channel>
+      <description>Skeletonized predicted segmentation</description>
+      <default>skeletonizedPred.nii.gz</default>
+    </image>
+
+    <image>
+      <name>labeledGT</name>
+      <label>Ground Truth Labeled Airways</label>
+      <longflag>labeledGT</longflag>
+      <channel>output</channel>
+      <description>Branch-labeled ground truth segmentation (ATM'22 tree parsing)</description>
+      <default>labeledGT.nii.gz</default>
+    </image>
+
+    <image>
+      <name>labeledPred</name>
+      <label>Prediction Labeled Airways</label>
+      <longflag>labeledPred</longflag>
+      <channel>output</channel>
+      <description>Branch-labeled predicted segmentation (ATM'22 tree parsing)</description>
+      <default>labeledPred.nii.gz</default>
+    </image>
+
+  </parameters>
+</executable>
