@@ -1,2 +1,2 @@
 add_subdirectory(AirwayRegistration)
-add_subdirectory(AnalyzeAirwaySegmentationV2)
+add_subdirectory(AnalyzeAirwaySegmentation)
