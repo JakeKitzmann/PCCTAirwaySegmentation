@@ -9,7 +9,10 @@ from skimage.morphology import skeletonize
 
 def load_array(path):
     """Read any ITK-supported format; return (numpy_xyz, itk_image)."""
-    img = itk.imread(path)
+    ImageType = itk.Image[itk.UC, 3]
+    reader = itk.ImageFileReader[ImageType].New(FileName=path)
+    reader.Update()
+    img = reader.GetOutput()
     # itk.GetArrayFromImage returns (z, y, x); ATM22 expects (x, y, z)
     return itk.GetArrayFromImage(img).T, img
 
