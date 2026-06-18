@@ -39,6 +39,10 @@ int main(int argc, char* argv[]) {
         return 1;
     }
     if (pid == 0) {
+        // Slicer sets PYTHONHOME/PYTHONPATH to its bundled Python; unset them
+        // so the system python3 finds its own stdlib instead of Slicer's.
+        unsetenv("PYTHONHOME");
+        unsetenv("PYTHONPATH");
         execvp("python3", const_cast<char* const*>(args.data()));
         _exit(127);
     }
