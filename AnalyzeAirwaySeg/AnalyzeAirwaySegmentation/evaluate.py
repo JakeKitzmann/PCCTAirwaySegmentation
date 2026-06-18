@@ -18,8 +18,19 @@ def main():
     script_dir = os.path.dirname(os.path.abspath(__file__))
     sys.path.insert(0, os.path.join(script_dir, 'atm22'))
 
-    import nibabel as nib
-    from skimage.morphology import skeletonize
+    try:
+        import nibabel as nib
+    except ImportError:
+        import subprocess
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'nibabel'])
+        import nibabel as nib
+
+    try:
+        from skimage.morphology import skeletonize
+    except ImportError:
+        import subprocess
+        subprocess.check_call([sys.executable, '-m', 'pip', 'install', 'scikit-image'])
+        from skimage.morphology import skeletonize
     from tree_parse import (
         large_connected_domain, skeleton_parsing, tree_parsing_func,
         loc_trachea, adjacent_map, parent_children_map,
