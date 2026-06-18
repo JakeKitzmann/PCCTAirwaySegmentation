@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
     std::string script = exe_dir + "/evaluate.py";
 
     std::vector<const char*> args = {
-        "python3",
+        PYTHON_EXECUTABLE,
         script.c_str(),
         "--segmentationGT",  segmentationGT.c_str(),
         "--segmentationPred", segmentationPred.c_str(),
@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
         // so the system python3 finds its own stdlib instead of Slicer's.
         unsetenv("PYTHONHOME");
         unsetenv("PYTHONPATH");
-        execvp("python3", const_cast<char* const*>(args.data()));
+        execvp(PYTHON_EXECUTABLE, const_cast<char* const*>(args.data()));
         _exit(127);
     }
     int status;
