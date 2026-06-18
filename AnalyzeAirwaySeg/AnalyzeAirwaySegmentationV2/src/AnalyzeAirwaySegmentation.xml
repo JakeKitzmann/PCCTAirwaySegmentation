@@ -29,14 +29,16 @@
     <image>
         <name>skeletonGT</name>
         <label>Ground Truth Skeleton</label>
+        <longflag>skeletonGT</longflag>
         <channel>output</channel>
         <description>Skeletonized ground truth segmentation</description>
         <default>skeletonizedGT.nii.gz</default>
     </image>
-  
+
     <image>
         <name>skeletonPred</name>
         <label>Prediction Skeleton</label>
+        <longflag>skeletonPred</longflag>
         <channel>output</channel>
         <description>Skeletonized predicted segmentation</description>
         <default>skeletonizedPred.nii.gz</default>
@@ -45,16 +47,18 @@
     <image>
         <name>labeledGT</name>
         <label>Ground Truth Labeled Airways</label>
+        <longflag>labeledGT</longflag>
         <channel>output</channel>
-        <description>Labeled ground truth segmentation</description>
+        <description>Branch-labeled ground truth segmentation (ATM'22 tree parsing)</description>
         <default>labeledGT.nii.gz</default>
     </image>
 
     <image>
         <name>labeledPred</name>
         <label>Prediction Labeled Airways</label>
+        <longflag>labeledPred</longflag>
         <channel>output</channel>
-        <description>Labeled predicted segmentation</description>
+        <description>Branch-labeled predicted segmentation (ATM'22 tree parsing)</description>
         <default>labeledPred.nii.gz</default>
     </image>
 
