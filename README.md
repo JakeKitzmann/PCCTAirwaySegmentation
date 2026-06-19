@@ -77,8 +77,6 @@ Key Python dependencies (managed by pixi): `numpy`, `matplotlib`, `pandas`, `sim
 
 Data is stored on the LSS cluster. NIfTI (`.nii.gz`) is the standard format throughout the pipeline. Do not commit data files to this repo.
 
-Cluster jobs are submitted via **SGE** (`qsub`).
-
 ## Pipeline Overview
 
 1. **Ground Truth Registration** (C++ / ITK) — registers low-res airway masks to high-res PCCT volumes (`GroundTruthRegistration/`)
